@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manajemen Pengeluaran - Financial Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Literata:wght@400;500;600;700&amp;family=Nunito+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#e4e0d8", "secondary-container": "#f0e8db", "tertiary-fixed-dim": "#dcc48e", "background": "#faf6f0", "secondary-fixed": "#f0e8db", "on-primary-fixed": "#002110", "primary": "#4a7c59", "inverse-on-surface": "#f5f0e8", "surface-tint": "#4a7c59", "surface-container-highest": "#e4e0d8", "on-surface-variant": "#4a4e4a", "primary-container": "#78a886", "surface-bright": "#faf6f0", "surface-container": "#f0ece4", "primary-fixed": "#c8e8d0", "secondary-fixed-dim": "#d4ccbf", "surface-container-low": "#f5f1ea", "tertiary-fixed": "#f8e0a8", "on-secondary-container": "#5e5548", "on-surface": "#2e3230", "on-secondary-fixed-variant": "#4a4538", "error-container": "#ffdad8", "on-tertiary": "#ffffff", "surface-container-high": "#eae6de", "on-error-container": "#690005", "inverse-primary": "#8ecf9e", "on-tertiary-fixed-variant": "#554020", "on-secondary": "#ffffff", "on-background": "#2e3230", "on-primary": "#ffffff", "tertiary": "#705c30", "primary-fixed-dim": "#8ecf9e", "inverse-surface": "#2e3230", "outline-variant": "#c4c8bc", "on-primary-fixed-variant": "#2a6038", "on-error": "#ffffff", "surface-dim": "#dbd7cf", "secondary": "#6b6358", "on-primary-container": "#d8f0de", "surface": "#faf6f0", "outline": "#74796e", "on-tertiary-container": "#554020", "tertiary-container": "#c4a66a", "error": "#b83230", "surface-container-lowest": "#ffffff", "on-secondary-fixed": "#1e1a13", "on-tertiary-fixed": "#221a05"
+                    },
+                    borderRadius: { DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px" },
+                    fontFamily: { headline: ["Literata"], display: ["Literata"], body: ["Nunito Sans"], label: ["Nunito Sans"] }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #faf6f0; color: #2e3230; font-family: 'Nunito Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .soft-shadow { box-shadow: 0 4px 20px rgba(46, 50, 48, 0.06); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full z-40 h-screen w-64 flex-col hidden md:flex bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant/30">
+<div class="p-6 border-b border-outline-variant/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-secondary-container">
+<img alt="Workshop Owner Profile" class="w-full h-full object-cover" data-alt="A warm, professional headshot of a workshop owner in a clean, brightly lit modern machining facility. Earthy tones, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjQ1UN9QqoaWLAflwKxmzgZHPJzOLFYcVU4wJupEGRieYyPes3dKQVA-9zxt1fhKx5_Jz4sqseOuNZQQzFzHyCN0VYzNGG7ZkUzUGPXpAp2XmyJnifzSOD-lsO7sAVMXkNlLgR1SxAkUTaMHPYJdM1EBAdun5sWiBO_cDA4lj12DcLOsUUK_HoQH9vvG2iJyKfQxEfF0cOGJUHziKsQM96kOGBwc0oDTsGEdFvTR138ORBB1ivhrMSNw"/>
+</div>
+<div>
+<h1 class="text-xl font-headline font-bold text-primary dark:text-primary-fixed-dim">Terra Machining</h1>
+<p class="text-xs font-body leading-relaxed text-on-surface-variant">Bengkel Bubut Management</p>
+</div>
+</div>
+<div class="p-4">
+<button class="w-full bg-primary hover:bg-surface-tint text-on-primary rounded-lg py-3 px-4 font-semibold flex justify-center items-center gap-2 transition-all duration-200 soft-shadow hover:scale-95 duration-150 transition-transform">
+<span class="material-symbols-outlined">add</span>
+                New Transaction
+            </button>
+</div>
+<nav class="flex-1 px-4 py-2 space-y-2 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body leading-relaxed">Projections</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary dark:text-primary-fixed-dim font-bold bg-secondary-container/50 dark:bg-secondary-container/20 rounded-lg scale-95 duration-150 transition-transform" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body leading-relaxed">Expenditure</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body leading-relaxed">Income</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body leading-relaxed">Master Data</span>
+</a>
+</nav>
+<div class="p-4 border-t border-outline-variant/30 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body leading-relaxed">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body leading-relaxed">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area Wrapper -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 right-0 w-full z-30 flex justify-between items-center px-6 py-3 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant/20 shadow-sm">
+<div class="md:hidden flex items-center gap-3">
+<button class="text-on-surface-variant p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-headline font-bold text-on-surface dark:text-surface-bright hidden md:block">Financial Control</h2>
+</div>
+<div class="flex items-center gap-6 flex-1 justify-end">
+<div class="hidden md:flex items-center bg-surface-container-low rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-primary/20 transition-all border border-transparent focus-within:border-primary-container max-w-md w-full">
+<input class="bg-transparent border-none focus:ring-0 text-sm font-label w-full text-on-surface placeholder-on-surface-variant" placeholder="Search transactions..." type="text"/>
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-full text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 p-6 md:p-10">
+<header class="mb-10">
+<h1 class="text-3xl md:text-4xl font-headline font-semibold text-primary mb-2">Manajemen Pengeluaran</h1>
+<p class="font-body text-on-surface-variant text-lg">Record raw materials, tools, and track supplier debt seamlessly.</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- COGS & Supplier Terms Form (Spans 2 columns on lg) -->
+<section class="lg:col-span-2 bg-surface-container-lowest rounded-[24px] p-8 soft-shadow border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-8 pb-4 border-b border-outline-variant/20">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<h2 class="text-2xl font-headline font-medium text-on-surface">Main Purchases (COGS)</h2>
+</div>
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Category -->
+<div class="space-y-2">
+<label class="font-label text-sm font-semibold text-on-surface-variant">Purchase Category</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 font-body transition-shadow">
+<option>Material (Baja, Aluminium, etc)</option>
+<option>Subcon Services</option>
+<option>Tools (Pahat Bubut, Endmill)</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-3 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Supplier -->
+<div class="space-y-2">
+<label class="font-label text-sm font-semibold text-on-surface-variant">Supplier / Vendor</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 font-body transition-shadow placeholder-on-surface-variant/50" placeholder="e.g. PT Baja Makmur" type="text"/>
+</div>
+</div>
+<!-- Item Description & Amount -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 space-y-2">
+<label class="font-label text-sm font-semibold text-on-surface-variant">Item Description</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 font-body transition-shadow" placeholder="e.g. 5 Batang Baja ST41" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label text-sm font-semibold text-on-surface-variant">Amount (IDR)</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 font-body transition-shadow text-right" placeholder="0" type="number"/>
+</div>
+</div>
+<!-- Supplier Terms Area (Visually distinct) -->
+<div class="bg-secondary-container/30 rounded-[16px] p-6 mt-6 border border-secondary-container/50">
+<h3 class="text-lg font-headline font-medium text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">handshake</span>
+                                Payment Terms
+                            </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-label text-sm font-semibold text-on-surface-variant">Payment Type</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-tertiary/40 font-body transition-shadow" id="paymentType">
+<option value="0">Tunai (Cash)</option>
+<option value="7">Tempo 7 Hari</option>
+<option value="14">Tempo 14 Hari</option>
+<option value="30">Tempo 30 Hari</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-3 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label text-sm font-semibold text-on-surface-variant">Calculated Due Date</label>
+<div class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface flex items-center justify-between opacity-80 cursor-not-allowed">
+<span class="font-body font-medium" id="dueDateDisplay">Today</span>
+<span class="material-symbols-outlined text-tertiary">calendar_today</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-4">
+<button class="bg-primary text-on-primary hover:bg-surface-tint font-body font-semibold py-3 px-8 rounded-xl transition-all duration-200 soft-shadow flex items-center gap-2" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">save</span>
+                                Record Purchase
+                            </button>
+</div>
+</form>
+</section>
+<!-- Right Column: Daily Cash & Debt Calendar -->
+<div class="space-y-8">
+<!-- Daily Operational Cash -->
+<section class="bg-surface-container-lowest rounded-[24px] p-6 soft-shadow border border-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-headline font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">local_cafe</span>
+                                Daily Cash
+                            </h2>
+</div>
+<form class="space-y-4">
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 font-body text-sm">
+<option>Electricity &amp; Water</option>
+<option>Fuel / Transportation</option>
+<option>Catering / Meals</option>
+<option>Miscellaneous Supplies</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant text-sm pointer-events-none">expand_more</span>
+</div>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 font-body text-sm text-right" placeholder="Amount (IDR)" type="number"/>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 font-body text-sm" placeholder="Short note..." type="text"/>
+<button class="w-full bg-surface-container-high text-primary border border-primary/20 hover:bg-primary-container/20 font-body font-semibold py-3 rounded-xl transition-colors" type="button">
+                                Add Expense
+                            </button>
+</form>
+</section>
+<!-- Debt Calendar (Upcoming Dues) -->
+<section class="bg-surface-container-low rounded-[24px] p-6 soft-shadow relative overflow-hidden">
+<!-- Decorative background element -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary-container/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="flex items-center justify-between mb-6 relative z-10">
+<h2 class="text-xl font-headline font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">event_upcoming</span>
+                                Upcoming Dues
+                            </h2>
+<button class="text-sm font-label text-primary hover:underline">View All</button>
+</div>
+<div class="space-y-4 relative z-10">
+<!-- Due Item 1 -->
+<div class="flex items-start gap-4 p-4 rounded-xl bg-surface-container-lowest border border-error-container/50 hover:shadow-md transition-shadow">
+<div class="flex flex-col items-center justify-center bg-error-container/30 text-on-error-container w-12 h-12 rounded-lg shrink-0">
+<span class="font-headline font-bold text-lg leading-none">12</span>
+<span class="font-label text-xs">Nov</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body font-bold text-on-surface truncate">PT Baja Makmur</p>
+<p class="font-body text-xs text-on-surface-variant truncate">Baja ST41 - Inv #1029</p>
+<p class="font-body text-sm text-error font-medium mt-1">Rp 4.500.000</p>
+</div>
+</div>
+<!-- Due Item 2 -->
+<div class="flex items-start gap-4 p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/20 hover:shadow-md transition-shadow">
+<div class="flex flex-col items-center justify-center bg-tertiary-container/20 text-on-tertiary-container w-12 h-12 rounded-lg shrink-0">
+<span class="font-headline font-bold text-lg leading-none">18</span>
+<span class="font-label text-xs">Nov</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body font-bold text-on-surface truncate">Toko Teknik Sentosa</p>
+<p class="font-body text-xs text-on-surface-variant truncate">Endmill &amp; Pahat</p>
+<p class="font-body text-sm text-on-surface font-medium mt-1">Rp 1.250.000</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+<script>
+        // Simple script to demonstrate the interaction of the Supplier Terms logic visually
+        document.addEventListener('DOMContentLoaded', () => {
+            const paymentSelect = document.getElementById('paymentType');
+            const dateDisplay = document.getElementById('dueDateDisplay');
+
+            function updateDate() {
+                const days = parseInt(paymentSelect.value);
+                if (days === 0) {
+                    dateDisplay.textContent = 'Today (Immediate)';
+                    dateDisplay.classList.remove('text-tertiary');
+                } else {
+                    const date = new Date();
+                    date.setDate(date.getDate() + days);
+                    dateDisplay.textContent = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                    dateDisplay.classList.add('text-tertiary');
+                }
+            }
+
+            paymentSelect.addEventListener('change', updateDate);
+            updateDate(); // init
+        });
+    </script>
+</body></html>

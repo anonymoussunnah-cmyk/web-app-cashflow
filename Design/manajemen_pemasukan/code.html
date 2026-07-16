@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manajemen Pemasukan - Terra Machining</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400..800&amp;family=Nunito+Sans:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e4e0d8",
+                    "secondary-container": "#f0e8db",
+                    "tertiary-fixed-dim": "#dcc48e",
+                    "background": "#faf6f0",
+                    "secondary-fixed": "#f0e8db",
+                    "on-primary-fixed": "#002110",
+                    "primary": "#4a7c59",
+                    "inverse-on-surface": "#f5f0e8",
+                    "surface-tint": "#4a7c59",
+                    "surface-container-highest": "#e4e0d8",
+                    "on-surface-variant": "#4a4e4a",
+                    "primary-container": "#78a886",
+                    "surface-bright": "#faf6f0",
+                    "surface-container": "#f0ece4",
+                    "primary-fixed": "#c8e8d0",
+                    "secondary-fixed-dim": "#d4ccbf",
+                    "surface-container-low": "#f5f1ea",
+                    "tertiary-fixed": "#f8e0a8",
+                    "on-secondary-container": "#5e5548",
+                    "on-surface": "#2e3230",
+                    "on-secondary-fixed-variant": "#4a4538",
+                    "error-container": "#ffdad8",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#eae6de",
+                    "on-error-container": "#690005",
+                    "inverse-primary": "#8ecf9e",
+                    "on-tertiary-fixed-variant": "#554020",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#2e3230",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#705c30",
+                    "primary-fixed-dim": "#8ecf9e",
+                    "inverse-surface": "#2e3230",
+                    "outline-variant": "#c4c8bc",
+                    "on-primary-fixed-variant": "#2a6038",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#dbd7cf",
+                    "secondary": "#6b6358",
+                    "on-primary-container": "#d8f0de",
+                    "surface": "#faf6f0",
+                    "outline": "#74796e",
+                    "on-tertiary-container": "#554020",
+                    "tertiary-container": "#c4a66a",
+                    "error": "#b83230",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#1e1a13",
+                    "on-tertiary-fixed": "#221a05"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.5rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": [
+                            "Literata"
+                    ],
+                    "display": [
+                            "Literata"
+                    ],
+                    "body": [
+                            "Nunito Sans"
+                    ],
+                    "label": [
+                            "Nunito Sans"
+                    ]
+            },
+            "fontSize": {}
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: #faf6f0;
+            color: #2e3230;
+        }
+        h1, h2, h3, h4, h5, h6, .font-headline {
+            font-family: 'Literata', serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased flex">
+<!-- SideNavBar -->
+<nav class="h-screen w-64 flex-col hidden md:flex bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant/30 fixed left-0 top-0 z-40">
+<!-- Header -->
+<div class="p-6 border-b border-outline-variant/30 flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center mb-3 overflow-hidden shadow-sm">
+<img alt="Workshop Owner Profile" class="w-full h-full object-cover" data-alt="A warm, professional portrait of a workshop owner in a clean, modern machining environment. Soft, earthy lighting with a cream and subtle green color palette. The subject exudes confidence and reliability, fitting for a premium industrial management application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaQvPsi3v-J_1xl76nEIRNni6ATA_S7YNr5MC3oz44oDeY2W_KrQQvfMeSajKzWHm5raCzJGpzjtzD30nG0gdp4om7m8t68h1EJWFru8A4_OjOuPA0t97coFPcClet9kMaDBpzq5NaZfrjNlysp-JEJ7UNiJg_oFkDcEJ6MOJdBFpIo-_p2HHURFyzuVSleX1fUPI2-eFQE_z7Jmec98irrJSAdRRLN5q-8XUgqRP0k3YleSAB62M5EA"/>
+</div>
+<h2 class="text-xl font-headline font-bold text-primary dark:text-primary-fixed-dim text-center">Terra Machining</h2>
+<p class="text-sm font-body text-on-surface-variant text-center mt-1">Bengkel Bubut Management</p>
+</div>
+<!-- Tabs -->
+<div class="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg font-body" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Projections</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg font-body" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Expenditure</span>
+</a>
+<!-- Active Tab: Income -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary dark:text-primary-fixed-dim font-bold bg-secondary-container/50 dark:bg-secondary-container/20 rounded-lg scale-95 duration-150 transition-transform font-body" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span>Income</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg font-body" href="#">
+<span class="material-symbols-outlined">database</span>
+<span>Master Data</span>
+</a>
+</div>
+<!-- CTA & Footer -->
+<div class="p-4 border-t border-outline-variant/30 flex flex-col gap-4">
+<button class="w-full bg-primary text-on-primary font-bold py-3 px-4 rounded-xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                New Transaction
+            </button>
+<div class="flex flex-col gap-1 mt-2">
+<a class="flex items-center gap-3 px-4 py-2 text-sm text-on-surface-variant hover:text-primary transition-colors rounded-lg font-body" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-sm text-on-surface-variant hover:text-primary transition-colors rounded-lg font-body" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span>Support</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 right-0 w-full z-30 flex justify-between items-center px-6 py-3 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Toggle (Visible only on mobile) -->
+<button class="md:hidden text-on-surface hover:text-primary transition-colors p-2 rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-lg font-headline font-bold text-on-surface dark:text-surface-bright tracking-tight">Financial Control</h1>
+</div>
+<div class="flex items-center gap-4">
+<!-- Search Bar -->
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px]">search</span>
+<input class="w-64 bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-sm font-body text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/20 transition-all focus:outline-none" placeholder="Search invoices..." type="text"/>
+</div>
+<!-- Trailing Icons -->
+<button class="text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-6 md:p-8 flex-1 flex flex-col gap-8 max-w-7xl mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h2 class="text-3xl font-headline font-bold text-on-surface mb-2 tracking-tight">Manajemen Pemasukan</h2>
+<p class="text-on-surface-variant font-body text-lg max-w-2xl leading-relaxed">Track outgoing invoices, manage customer payment terms, and monitor accounts receivable statuses.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container hover:bg-surface-container-high text-primary font-bold py-2.5 px-5 rounded-xl border border-outline-variant/30 transition-colors flex items-center gap-2 text-sm shadow-[0_4px_20px_rgba(46,50,48,0.04)]">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export
+                    </button>
+<button class="bg-primary text-on-primary font-bold py-2.5 px-5 rounded-xl hover:bg-primary/90 transition-colors flex items-center gap-2 text-sm shadow-[0_4px_20px_rgba(46,50,48,0.06)]">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Create Invoice
+                    </button>
+</div>
+</div>
+<!-- Dashboard Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<!-- KPI Card 1: Total Outstanding -->
+<div class="bg-surface-container-low p-6 rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex flex-col justify-between md:col-span-1 border border-outline-variant/20 relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/10 transition-colors duration-500"></div>
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-2.5 bg-primary-container/30 rounded-lg text-primary">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<span class="bg-error-container text-on-error-container text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12%
+                             </span>
+</div>
+<p class="text-on-surface-variant font-body text-sm font-semibold mb-1 uppercase tracking-wider">Total Outstanding</p>
+<h3 class="text-2xl font-headline font-bold text-on-surface">Rp 45.200.000</h3>
+</div>
+</div>
+<!-- KPI Card 2: Overdue -->
+<div class="bg-surface-container-low p-6 rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex flex-col justify-between md:col-span-1 border border-outline-variant/20 relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-error/5 rounded-full blur-xl group-hover:bg-error/10 transition-colors duration-500"></div>
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-2.5 bg-error-container/50 rounded-lg text-error">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<span class="text-error font-body text-sm font-semibold">3 Invoices</span>
+</div>
+<p class="text-on-surface-variant font-body text-sm font-semibold mb-1 uppercase tracking-wider">Total Overdue</p>
+<h3 class="text-2xl font-headline font-bold text-on-surface">Rp 8.500.000</h3>
+</div>
+</div>
+<!-- KPI Card 3: Received This Month -->
+<div class="bg-surface-container-low p-6 rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex flex-col justify-between md:col-span-2 border border-outline-variant/20 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-secondary-container/20 to-transparent pointer-events-none"></div>
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="p-2.5 bg-secondary-container rounded-lg text-tertiary">
+<span class="material-symbols-outlined">price_check</span>
+</div>
+<p class="text-on-surface-variant font-body text-sm font-semibold uppercase tracking-wider">Received This Month</p>
+</div>
+<span class="bg-primary/10 text-primary text-xs font-bold px-2.5 py-1 rounded-full">October 2023</span>
+</div>
+<div class="flex items-end justify-between">
+<h3 class="text-4xl font-headline font-bold text-on-surface">Rp 128.450.000</h3>
+<div class="h-12 w-24 bg-surface-container-high rounded-lg overflow-hidden flex items-end opacity-70">
+<!-- Decorative mini chart -->
+<div class="w-1/4 bg-tertiary-fixed-dim h-1/3 rounded-t-sm mx-0.5"></div>
+<div class="w-1/4 bg-tertiary-fixed-dim h-2/3 rounded-t-sm mx-0.5"></div>
+<div class="w-1/4 bg-tertiary-fixed-dim h-1/2 rounded-t-sm mx-0.5"></div>
+<div class="w-1/4 bg-tertiary h-full rounded-t-sm mx-0.5"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area: Invoice Table & Form -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- Invoice List (Takes up more space) -->
+<div class="xl:col-span-2 bg-surface-container-low rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] border border-outline-variant/20 flex flex-col overflow-hidden">
+<!-- Table Header Actions -->
+<div class="p-6 border-b border-outline-variant/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface-bright/50">
+<h3 class="text-lg font-headline font-bold text-on-surface">Recent Invoices</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/50 text-sm font-body text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+                             </button>
+<div class="relative">
+<select class="appearance-none bg-surface-container px-4 py-1.5 pr-8 rounded-lg border-none text-sm font-body text-on-surface focus:ring-2 focus:ring-primary/30 cursor-pointer">
+<option>All Statuses</option>
+<option>Unpaid</option>
+<option>Paid</option>
+<option>Overdue</option>
+<option>Partial</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Responsive Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant/30">
+<th class="p-4 font-body text-sm font-semibold text-on-surface-variant whitespace-nowrap">Invoice ID</th>
+<th class="p-4 font-body text-sm font-semibold text-on-surface-variant whitespace-nowrap">Customer</th>
+<th class="p-4 font-body text-sm font-semibold text-on-surface-variant whitespace-nowrap">Amount</th>
+<th class="p-4 font-body text-sm font-semibold text-on-surface-variant whitespace-nowrap">Date Sent</th>
+<th class="p-4 font-body text-sm font-semibold text-on-surface-variant whitespace-nowrap">Due Date</th>
+<th class="p-4 font-body text-sm font-semibold text-on-surface-variant whitespace-nowrap text-center">Status</th>
+<th class="p-4 font-body text-sm font-semibold text-on-surface-variant whitespace-nowrap text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body text-sm text-on-surface divide-y divide-outline-variant/10">
+<!-- Row 1: Overdue -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-4 font-medium">INV-2023-089</td>
+<td class="p-4">PT. Sumber Teknik</td>
+<td class="p-4 font-bold text-tertiary">Rp 3.500.000</td>
+<td class="p-4 text-on-surface-variant">Sep 15, 2023</td>
+<td class="p-4 text-error font-medium">Oct 15, 2023</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-error-container text-on-error-container border border-error/20">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Overdue
+                                        </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-md opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Unpaid -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-4 font-medium">INV-2023-092</td>
+<td class="p-4">CV. Maju Bersama</td>
+<td class="p-4 font-bold text-tertiary">Rp 12.000.000</td>
+<td class="p-4 text-on-surface-variant">Oct 02, 2023</td>
+<td class="p-4 text-on-surface-variant">Nov 01, 2023</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-surface-variant text-on-surface-variant border border-outline-variant/50">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Unpaid
+                                        </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-md opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Partial -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-4 font-medium">INV-2023-094</td>
+<td class="p-4">Bintang Makmur</td>
+<td class="p-4 font-bold text-tertiary">Rp 25.000.000</td>
+<td class="p-4 text-on-surface-variant">Oct 10, 2023</td>
+<td class="p-4 text-on-surface-variant">Nov 09, 2023</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant border border-tertiary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Partial
+                                        </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-md opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Paid -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-4 font-medium">INV-2023-085</td>
+<td class="p-4">Karya Sentosa Mulia</td>
+<td class="p-4 font-bold text-tertiary">Rp 8.200.000</td>
+<td class="p-4 text-on-surface-variant">Sep 05, 2023</td>
+<td class="p-4 text-on-surface-variant">Oct 05, 2023</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-primary-fixed text-on-primary-fixed-variant border border-primary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Paid
+                                        </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-md opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination (Simple) -->
+<div class="p-4 border-t border-outline-variant/30 flex justify-between items-center bg-surface-bright/30">
+<span class="text-sm font-body text-on-surface-variant">Showing 1 to 4 of 24 entries</span>
+<div class="flex gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-primary font-bold transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Record New Invoice Form (Side Panel style) -->
+<div class="xl:col-span-1">
+<div class="bg-surface-container-lowest rounded-2xl shadow-[0_4px_20px_rgba(46,50,48,0.08)] border border-outline-variant/10 p-6 sticky top-24">
+<div class="flex items-center gap-3 mb-6 pb-4 border-b border-outline-variant/20">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined text-[24px]">post_add</span>
+</div>
+<h3 class="text-lg font-headline font-bold text-on-surface">Record Invoice</h3>
+</div>
+<form class="flex flex-col gap-5">
+<!-- Customer Name -->
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-label font-semibold text-on-surface">Customer Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">person</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl py-2.5 pl-10 pr-4 text-sm font-body text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all" placeholder="Enter customer name or select..." type="text"/>
+</div>
+</div>
+<!-- Amount -->
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-label font-semibold text-on-surface">Invoice Amount (Rp)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-on-surface-variant/60 text-sm">Rp</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl py-2.5 pl-10 pr-4 text-sm font-body text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all" placeholder="0.00" type="number"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Date Sent -->
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-label font-semibold text-on-surface">Date Sent</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">calendar_today</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl py-2.5 pl-10 pr-3 text-sm font-body text-on-surface focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all" type="date"/>
+</div>
+</div>
+<!-- Terms Management -->
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-label font-semibold text-on-surface">Payment Terms</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low border border-outline-variant/30 rounded-xl py-2.5 pl-4 pr-10 text-sm font-body text-on-surface focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all cursor-pointer">
+<option value="0">Due on Receipt</option>
+<option value="7">Net 7</option>
+<option value="15">Net 15</option>
+<option selected="" value="30">Net 30</option>
+<option value="60">Net 60</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">arrow_drop_down</span>
+</div>
+</div>
+</div>
+<!-- Auto-calculated Due Date Display (Readonly) -->
+<div class="p-3 bg-secondary-container/30 rounded-xl border border-secondary-container flex items-center justify-between">
+<span class="text-xs font-body text-on-surface-variant font-semibold uppercase tracking-wider">Calculated Due Date</span>
+<span class="text-sm font-bold text-tertiary">Nov 23, 2023</span>
+</div>
+<div class="flex flex-col gap-1.5 mt-2">
+<label class="text-sm font-label font-semibold text-on-surface">Initial Status</label>
+<div class="flex gap-2">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="peer sr-only" name="status" type="radio"/>
+<div class="text-center py-2 px-3 rounded-lg border border-outline-variant/30 peer-checked:bg-surface-variant peer-checked:border-outline peer-checked:font-bold text-sm font-body text-on-surface-variant transition-all">
+                                            Unpaid
+                                        </div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="status" type="radio"/>
+<div class="text-center py-2 px-3 rounded-lg border border-outline-variant/30 peer-checked:bg-primary-fixed peer-checked:border-primary peer-checked:text-on-primary-fixed-variant peer-checked:font-bold text-sm font-body text-on-surface-variant transition-all">
+                                            Paid
+                                        </div>
+</label>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-4 mt-2 border-t border-outline-variant/20 flex gap-3">
+<button class="flex-1 bg-surface-container hover:bg-surface-container-high text-on-surface font-bold py-2.5 px-4 rounded-xl transition-colors text-sm" type="button">
+                                    Clear
+                                </button>
+<button class="flex-[2] bg-primary text-on-primary font-bold py-2.5 px-4 rounded-xl hover:bg-primary/90 transition-colors shadow-sm text-sm" type="button">
+                                    Save Invoice
+                                </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
