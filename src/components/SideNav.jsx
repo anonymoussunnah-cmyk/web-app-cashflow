@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 const PROFILE_IMG =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuAaQvPsi3v-J_1xl76nEIRNni6ATA_S7YNr5MC3oz44oDeY2W_KrQQvfMeSajKzWHm5raCzJGpzjtzD30nG0gdp4om7m8t68h1EJWFru8A4_OjOuPA0t97coFPcClet9kMaDBpzq5NaZfrjNlysp-JEJ7UNiJg_oFkDcEJ6MOJdBFpIo-_p2HHURFyzuVSleX1fUPI2-eFQE_z7Jmec98irrJSAdRRLN5q-8XUgqRP0k3YleSAB62M5EA'
@@ -31,7 +32,45 @@ function TabLink({ to, icon, label }) {
   )
 }
 
+const NEW_OPTIONS = [
+  {
+    label: 'New Income',
+    desc: 'Create customer invoice',
+    icon: 'receipt_long',
+    to: '/income#new',
+  },
+  {
+    label: 'New Expenditure',
+    desc: 'Record a payment',
+    icon: 'payments',
+    to: '/expenditure',
+  },
+]
+
 export default function SideNav() {
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('mousedown', onClick)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onClick)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const choose = (to) => {
+    setOpen(false)
+    navigate(to)
+  }
+
   return (
     <nav className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-outline-variant/30 bg-surface-container-low pb-6 md:flex">
       <div>
@@ -57,11 +96,38 @@ export default function SideNav() {
           ))}
         </div>
 
-        <div className="mt-6 px-4">
-          <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-on-primary shadow-[0_4px_20px_rgba(46,50,48,0.06)] transition-colors hover:bg-primary/90">
+        <div className="relative mt-6 px-4" ref={ref}>
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-on-primary shadow-[0_4px_20px_rgba(46,50,48,0.06)] transition-colors hover:bg-primary/90"
+          >
             <span className="material-symbols-outlined">add</span>
             New Transaction
           </button>
+
+          {open && (
+            <div className="absolute left-4 right-4 top-full z-50 mt-2 overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-2 shadow-[0_4px_20px_rgba(46,50,48,0.12)]">
+              {NEW_OPTIONS.map((opt) => (
+                <button
+                  key={opt.to}
+                  onClick={() => choose(opt.to)}
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-surface-container-high"
+                >
+                  <span className="material-symbols-outlined text-primary">
+                    {opt.icon}
+                  </span>
+                  <span>
+                    <span className="block font-body text-sm font-semibold text-on-surface">
+                      {opt.label}
+                    </span>
+                    <span className="block font-body text-xs text-on-surface-variant">
+                      {opt.desc}
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

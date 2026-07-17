@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import KpiCards from './income/KpiCards.jsx'
 import InvoiceTable from './income/InvoiceTable.jsx'
 import RecordInvoiceForm from './income/RecordInvoiceForm.jsx'
@@ -8,6 +9,9 @@ import { useInvoices } from '../lib/useInvoices'
 export default function Income() {
   const [modalOpen, setModalOpen] = useState(false)
   const { invoices, loading, addInvoice } = useInvoices()
+  const location = useLocation()
+
+  const openModal = () => setModalOpen(true)
 
   return (
     <div className="flex w-full flex-1 flex-col gap-8 p-6 md:p-8">
@@ -31,7 +35,7 @@ export default function Income() {
               Export
             </button>
             <button
-              onClick={() => setModalOpen(true)}
+              onClick={openModal}
               className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-on-primary shadow-[0_4px_20px_rgba(46,50,48,0.06)] transition-colors hover:bg-primary/90"
             >
               <span className="material-symbols-outlined text-[18px]">add</span>
@@ -53,8 +57,12 @@ export default function Income() {
       </div>
 
       <CreateInvoiceModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        open={modalOpen || location.hash === '#new'}
+        onClose={() => {
+          setModalOpen(false)
+          if (location.hash === '#new')
+            window.history.replaceState(null, '', window.location.pathname)
+        }}
         onSave={addInvoice}
       />
     </div>
