@@ -1,14 +1,12 @@
-import { Link, useLocation } from 'react-router-dom'
-
 const TITLES = {
-  '/': 'Financial Control',
-  '/income': 'Income Management',
-  '/master-data': 'Master Data',
+  dashboard: 'Financial Control',
+  income: 'Income Management',
+  'master-data': 'Master Data',
+  expenditure: 'Expenditure',
 }
 
-export default function TopNav() {
-  const { pathname } = useLocation()
-  const title = TITLES[pathname] || 'Financial Control'
+export default function TopNav({ view }) {
+  const title = TITLES[view] || 'Financial Control'
 
   return (
     <header className="sticky top-0 right-0 z-30 flex w-full items-center justify-between bg-surface/80 px-6 py-3 shadow-sm backdrop-blur-md dark:bg-surface-dim/80">
@@ -20,18 +18,18 @@ export default function TopNav() {
           {title}
         </h1>
         <nav className="ml-6 hidden gap-6 sm:flex">
-          <Link
-            to="/"
+          <button
+            type="button"
             className="border-b-2 border-primary py-4 font-label font-bold text-primary hover:text-primary dark:text-primary-fixed-dim dark:hover:text-primary-fixed-dim"
           >
             Dashboard
-          </Link>
-          <Link
-            to="/reports"
+          </button>
+          <button
+            type="button"
             className="py-4 font-label text-on-surface-variant hover:text-primary dark:text-surface-variant dark:hover:text-primary-fixed-dim"
           >
             Reports
-          </Link>
+          </button>
         </nav>
       </div>
 
@@ -42,7 +40,7 @@ export default function TopNav() {
           </span>
           <input
             type="text"
-            placeholder={pathname === '/master-data' ? 'Search records...' : 'Search invoices...'}
+            placeholder={view === 'master-data' ? 'Search records...' : 'Search invoices...'}
             className="w-64 rounded-full border-none bg-surface-container-low py-2 pl-10 pr-4 text-sm font-body text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </div>

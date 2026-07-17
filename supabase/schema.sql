@@ -45,3 +45,41 @@ values
   ('INV-2023-094', 'Bintang Makmur',      25000000, '2023-10-10', '2023-11-09', 'Partial'),
   ('INV-2023-085', 'Karya Sentosa Mulia',  8200000, '2023-09-05', '2023-10-05', 'Paid')
 on conflict (invoice_no) do nothing;
+
+-- =========================================================================
+-- purchases: stores outgoing expenses (COGS, tools, supplier debt)
+-- =========================================================================
+create table if not exists public.purchases (
+  id            uuid primary key default gen_random_uuid(),
+  purchase_no   text not null unique,
+  category      text not null,
+  supplier      text not null,
+  item_desc     text,
+  amount        numeric(15,2) not null default 0,
+  payment_type  text not null default 'Tunai (Cash)',
+  due_date      date not null,
+  status        text not null default 'Unpaid'
+                check (status in ('Unpaid', 'Paid', 'Partial')),
+  created_at    timestamptz not null default now()
+);
+
+create index if not exists purchases_due_date_idx on public.purchases (due_date asc);
+
+alter table public.purchases enable row level security;
+
+drop policy if exists "Purchases are readable by everyone" on public.purchases;
+create policy "Purchases are readable by everyone"
+  on public.purchases for select
+  using (true);
+
+drop policy if exists "Purchases are insertable by everyone" on public.purchases;
+create policy "Purchases are insertable by everyone"
+  on public.purchases for insert
+  with check (true);
+
+-- Seed sample upcoming dues (optional)
+insert into public.purchases (purchase_no, category, supplier, item_desc, amount, payment_type, due_date, status)
+values
+  ('PRC-2023-1029', 'Material (Baja, Aluminium, etc)', 'PT Baja Makmur', 'Baja ST41', 4500000, 'Tempo 14 Hari', '2023-11-12', 'Unpaid'),
+  ('PRC-2023-1030', 'Tools (Pahat Bubut, Endmill)', 'Toko Teknik Sentosa', 'Endmill & Pahat', 1250000, 'Tempo 14 Hari', '2023-11-18', 'Unpaid')
+on conflict (purchase_no) do nothing;
