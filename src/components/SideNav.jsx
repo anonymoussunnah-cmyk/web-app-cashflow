@@ -1,31 +1,33 @@
+import { NavLink } from 'react-router-dom'
+
 const PROFILE_IMG =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuB5I2ATLOY81DyWL7KGpFUd3M30fBtoQ60BxHKUk29yx6HP66eIEP3QOMDBVwSYKfFb9hET9aAscPFLgIePNfiPR1HZch41KUeZBOh483kHnxMyCAbYCJ_4hKqqZ3eHioo5-OrMcbCp2AIMjY0OJw0URM2iRAW0pt6VSkVpOOEaQ7x9tUUoDX5WonhQHlfO-4bauu7Bz4PWBNUqG7cYR6UQXJLxjxhnZciHX8YxfW4XrWxWvFX1gyqCYg'
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuAaQvPsi3v-J_1xl76nEIRNni6ATA_S7YNr5MC3oz44oDeY2W_KrQQvfMeSajKzWHm5raCzJGpzjtzD30nG0gdp4om7m8t68h1EJWFru8A4_OjOuPA0t97coFPcClet9kMaDBpzq5NaZfrjNlysp-JEJ7UNiJg_oFkDcEJ6MOJdBFpIo-_p2HHURFyzuVSleX1fUPI2-eFQE_z7Jmec98irrJSAdRRLN5q-8XUgqRP0k3YleSAB62M5EA'
 
 const mainTabs = [
-  { icon: 'analytics', label: 'Projections', active: true },
-  { icon: 'payments', label: 'Expenditure' },
-  { icon: 'receipt_long', label: 'Income' },
-  { icon: 'database', label: 'Master Data' },
+  { to: '/', icon: 'analytics', label: 'Projections' },
+  { to: '/expenditure', icon: 'payments', label: 'Expenditure' },
+  { to: '/income', icon: 'receipt_long', label: 'Income' },
+  { to: '/master-data', icon: 'database', label: 'Master Data' },
 ]
 
 const footerTabs = [
-  { icon: 'settings', label: 'Settings' },
-  { icon: 'help', label: 'Support' },
+  { to: '/settings', icon: 'settings', label: 'Settings' },
+  { to: '/support', icon: 'help', label: 'Support' },
 ]
 
-function NavLink({ icon, label, active }) {
+function TabLink({ to, icon, label }) {
   return (
-    <a
-      href="#"
-      className={
-        active
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        isActive
           ? 'flex items-center gap-3 px-4 py-3 text-primary dark:text-primary-fixed-dim font-bold bg-secondary-container/50 dark:bg-secondary-container/20 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-200 scale-95'
           : 'flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-200'
       }
     >
       <span className="material-symbols-outlined">{icon}</span>
       {label}
-    </a>
+    </NavLink>
   )
 }
 
@@ -33,44 +35,42 @@ export default function SideNav() {
   return (
     <nav className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-outline-variant/30 bg-surface-container-low pb-6 md:flex">
       <div>
-        <div className="mb-4 border-b border-outline-variant/20 p-6">
-          <div className="mb-2 flex items-center gap-3">
-            <div className="h-10 w-10 overflow-hidden rounded-full bg-surface-container-highest">
-              <img
-                alt="Workshop Owner Profile"
-                className="h-full w-full object-cover"
-                src={PROFILE_IMG}
-              />
-            </div>
-            <div>
-              <h2 className="font-headline text-xl font-bold leading-tight text-primary dark:text-primary-fixed-dim">
-                Terra Machining
-              </h2>
-              <p className="text-xs font-body text-on-surface-variant">
-                Bengkel Bubut Management
-              </p>
-            </div>
+        <div className="mb-4 flex flex-col items-center border-b border-outline-variant/30 p-6">
+          <div className="mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-secondary-container shadow-sm">
+            <img
+              alt="Workshop Owner Profile"
+              className="h-full w-full object-cover"
+              src={PROFILE_IMG}
+            />
           </div>
+          <h2 className="text-center font-headline text-xl font-bold text-primary dark:text-primary-fixed-dim">
+            Terra Machining
+          </h2>
+          <p className="mt-1 text-center text-sm font-body text-on-surface-variant">
+            Bengkel Bubut Management
+          </p>
         </div>
 
-        <div className="space-y-2 px-4 font-body leading-relaxed">
+        <div className="flex flex-col gap-2 px-3 py-4">
           {mainTabs.map((t) => (
-            <NavLink key={t.label} {...t} />
+            <TabLink key={t.to} {...t} />
           ))}
         </div>
 
         <div className="mt-6 px-4">
-          <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-body font-semibold text-on-primary shadow-sm transition-colors hover:bg-surface-tint">
+          <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-on-primary shadow-[0_4px_20px_rgba(46,50,48,0.06)] transition-colors hover:bg-primary/90">
             <span className="material-symbols-outlined">add</span>
             New Transaction
           </button>
         </div>
       </div>
 
-      <div className="mt-auto space-y-2 px-4 font-body leading-relaxed">
-        {footerTabs.map((t) => (
-          <NavLink key={t.label} {...t} />
-        ))}
+      <div className="mt-auto flex flex-col gap-4 border-t border-outline-variant/30 p-4">
+        <div className="flex flex-col gap-1 mt-2">
+          {footerTabs.map((t) => (
+            <TabLink key={t.to} {...t} />
+          ))}
+        </div>
       </div>
     </nav>
   )
