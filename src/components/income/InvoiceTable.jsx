@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { formatCurrency, formatDate, useInvoices } from '../../lib/useInvoices'
+import { formatCurrency, formatDate } from '../../lib/useInvoices'
 
 const STATUS_STYLES = {
   Overdue:
@@ -27,9 +27,7 @@ function StatusBadge({ status }) {
 
 const FILTERS = ['All Statuses', 'Unpaid', 'Paid', 'Overdue', 'Partial']
 
-export default function InvoiceTable() {
-  const { invoices, loading } = useInvoices()
-  const [filter, setFilter] = useState('All Statuses')
+export default function InvoiceTable({ invoices, loading }) {
 
   const visible = useMemo(
     () =>

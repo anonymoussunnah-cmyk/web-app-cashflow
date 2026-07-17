@@ -7,7 +7,7 @@ import { useInvoices } from '../lib/useInvoices'
 
 export default function Income() {
   const [modalOpen, setModalOpen] = useState(false)
-  const { addInvoice } = useInvoices()
+  const { invoices, loading, addInvoice } = useInvoices()
 
   return (
     <div className="flex w-full flex-1 flex-col gap-8 p-6 md:p-8">
@@ -44,7 +44,7 @@ export default function Income() {
 
         <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
           <div className="xl:col-span-2">
-            <InvoiceTable />
+            <InvoiceTable invoices={invoices} loading={loading} />
           </div>
           <div className="xl:col-span-1">
             <RecordInvoiceForm onSave={addInvoice} />
