@@ -28,6 +28,7 @@ function StatusBadge({ status }) {
 const FILTERS = ['All Statuses', 'Unpaid', 'Paid', 'Overdue', 'Partial']
 
 export default function InvoiceTable({ invoices, loading }) {
+  const [filter, setFilter] = useState('All Statuses')
 
   const visible = useMemo(
     () =>
