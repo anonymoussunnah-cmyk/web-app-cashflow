@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { isSupabaseConfigured, supabase } from '../lib/supabase'
 
 function parseIdr(value) {
   const n = Number(String(value).replace(/[^0-9.-]/g, ''))
@@ -13,19 +14,70 @@ function formatIdr(value) {
   }).format(value)
 }
 
+function inRange(dateStr, start, end) {
+  if (!dateStr) return false
+  return dateStr >= start && dateStr <= end
+}
+
+const SEED_INFLOW = 45000000 // invoices expected to be collected in range
+const SEED_OUTFLOW = 5750000 // purchases expected to be paid in range
+
 export default function PredictionCalculator() {
   const [balance, setBalance] = useState('Rp 125.000.000')
   const [startDate, setStartDate] = useState('2023-11-01')
   const [endDate, setEndDate] = useState('2023-11-30')
-
-  // Example projection model: apply a -34% shift from the starting balance.
-  const projected = useMemo(() => {
-    const start = parseIdr(balance)
-    return Math.round(start * 0.66)
-  }, [balance])
+  const [calculated, setCalculated] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [summary, setSummary] = useState({
+    inflow: 45000000,
+    outflow: 5750000,
+  })
 
   const start = parseIdr(balance)
-  const pct = start > 0 ? Math.round(((projected - start) / start) * 100) : 0
+
+  // Initial display uses a simple estimate; recomputed on button click.
+  const projected = useMemo(() => {
+    return Math.round(start + summary.inflow - summary.outflow)
+  }, [start, summary])
+
+  const pct =
+    start > 0 ? Math.round(((projected - start) / start) * 100) : 0
+  const trendUp = pct >= 0
+
+  const handleCalculate = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      let inflow = 0
+      let outflow = 0
+      if (isSupabaseConfigured) {
+        const [{ data: inv }, { data: pur }] = await Promise.all([
+          supabase
+            .from('invoices')
+            .select('amount, due_date, status')
+            .neq('status', 'Overdue'),
+          supabase.from('purchases').select('amount, due_date, status'),
+        ])
+        inv?.forEach((r) => {
+          if (inRange(r.due_date, startDate, endDate) && r.status !== 'Paid')
+            inflow += Number(r.amount) || 0
+        })
+        pur?.forEach((r) => {
+          if (inRange(r.due_date, startDate, endDate) && r.status !== 'Paid')
+            outflow += Number(r.amount) || 0
+        })
+      } else {
+        inflow = SEED_INFLOW
+        outflow = SEED_OUTFLOW
+      }
+      setSummary({ inflow, outflow })
+      setCalculated(true)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="flex flex-col rounded-xl border border-surface-variant/50 bg-surface p-8 soft-shadow lg:col-span-5">
@@ -34,10 +86,7 @@ export default function PredictionCalculator() {
         Prediction Calculator
       </h3>
 
-      <form
-        className="flex flex-1 flex-col space-y-6"
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <form className="flex flex-1 flex-col space-y-6" onSubmit={handleCalculate}>
         <div>
           <label className="mb-2 block text-sm font-semibold font-body text-on-surface-variant">
             Saldo Awal Bank/Kas (IDR)
@@ -78,10 +127,11 @@ export default function PredictionCalculator() {
         <div className="mt-6 border-t border-outline-variant/30 pt-4">
           <button
             type="submit"
-            className="mb-6 flex w-full items-center justify-center gap-2 rounded-xl bg-secondary-container px-4 py-3 font-body font-semibold text-on-secondary-container transition-colors hover:bg-tertiary-fixed"
+            disabled={loading}
+            className="mb-6 flex w-full items-center justify-center gap-2 rounded-xl bg-secondary-container px-4 py-3 font-body font-semibold text-on-secondary-container transition-colors hover:bg-tertiary-fixed disabled:opacity-60"
           >
             <span className="material-symbols-outlined text-sm">update</span>
-            Calculate Projection
+            {loading ? 'Calculating...' : 'Calculate Projection'}
           </button>
 
           <div className="rounded-xl border border-primary-fixed bg-primary-fixed/30 p-6 text-center">
@@ -91,10 +141,16 @@ export default function PredictionCalculator() {
             <p className="font-headline text-3xl font-bold text-primary">
               {formatIdr(projected)}
             </p>
-            <p className="mt-2 flex items-center justify-center gap-1 text-xs font-body text-error">
+            <p
+              className={
+                'mt-2 flex items-center justify-center gap-1 text-xs font-body ' +
+                (trendUp ? 'text-primary' : 'text-error')
+              }
+            >
               <span className="material-symbols-outlined text-[16px]">
-                trending_down
+                {trendUp ? 'trending_up' : 'trending_down'}
               </span>
+              {pct > 0 ? '+' : ''}
               {pct}% from start balance
             </p>
           </div>
