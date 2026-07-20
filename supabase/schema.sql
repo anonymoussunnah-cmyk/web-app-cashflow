@@ -137,6 +137,17 @@ create policy "Partners are insertable by everyone"
   on public.partners for insert
   with check (true);
 
+drop policy if exists "Partners are updatable by everyone" on public.partners;
+create policy "Partners are updatable by everyone"
+  on public.partners for update
+  using (true)
+  with check (true);
+
+drop policy if exists "Partners are deletable by everyone" on public.partners;
+create policy "Partners are deletable by everyone"
+  on public.partners for delete
+  using (true);
+
 -- Seed sample partners (optional)
 insert into public.partners (name, type, contact, terms)
 values

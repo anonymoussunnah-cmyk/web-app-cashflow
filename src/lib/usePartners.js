@@ -47,9 +47,52 @@ export function usePartners() {
     [load],
   )
 
+  const updatePartner = useCallback(
+    async (id, { name, type, contact, terms }) => {
+      const row = { name: name.trim(), type, contact: contact.trim(), terms }
+      if (!isSupabaseConfigured) {
+        setPartners((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, ...row } : p)),
+        )
+        return
+      }
+      const { error: err } = await supabase
+        .from('partners')
+        .update(row)
+        .eq('id', id)
+      if (err) throw err
+      await load()
+    },
+    [load],
+  )
+
+  const deletePartner = useCallback(
+    async (id) => {
+      if (!isSupabaseConfigured) {
+        setPartners((prev) => prev.filter((p) => p.id !== id))
+        return
+      }
+      const { error: err } = await supabase
+        .from('partners')
+        .delete()
+        .eq('id', id)
+      if (err) throw err
+      await load()
+    },
+    [load],
+  )
+
   useEffect(() => {
     load()
   }, [load])
 
-  return { partners, loading, error, addPartner, reload: load }
+  return {
+    partners,
+    loading,
+    error,
+    addPartner,
+    updatePartner,
+    deletePartner,
+    reload: load,
+  }
 }

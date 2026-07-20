@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { usePartners } from '../lib/usePartners'
 import AddPartnerModal from './masterdata/AddPartnerModal'
+import ViewAllPartnersModal from './masterdata/ViewAllPartnersModal'
+import ConfirmDeleteModal from './masterdata/ConfirmDeleteModal'
 
 const CATEGORIES = [
   { icon: 'construction', label: 'Material Besi' },
@@ -27,7 +29,15 @@ function TypeBadge({ type }) {
   )
 }
 
-function PartnersDirectory({ partners, loading, onAdd }) {
+function PartnersDirectory({
+  partners,
+  loading,
+  onAdd,
+  onViewAll,
+  onEdit,
+  onDelete,
+}) {
+  const stop = (e) => e.stopPropagation()
   return (
     <section className="flex h-full flex-col rounded-2xl border border-surface-variant/50 bg-surface-container-lowest p-6 soft-shadow">
       <div className="mb-6 flex items-center justify-between">
@@ -90,12 +100,18 @@ function PartnersDirectory({ partners, loading, onAdd }) {
                   </td>
                   <td className="px-4 py-4 text-on-surface-variant">{p.terms}</td>
                   <td className="py-4 pl-4 text-right opacity-0 transition-opacity group-hover:opacity-100">
-                    <button className="p-1 text-tertiary hover:text-tertiary-container">
+                    <button
+                      onClick={() => onEdit(p)}
+                      className="p-1 text-tertiary hover:text-tertiary-container"
+                    >
                       <span className="material-symbols-outlined text-[20px]">
                         edit
                       </span>
                     </button>
-                    <button className="p-1 text-error hover:text-error-container">
+                    <button
+                      onClick={() => onDelete(p)}
+                      className="p-1 text-error hover:text-error-container"
+                    >
                       <span className="material-symbols-outlined text-[20px]">
                         delete
                       </span>
@@ -109,7 +125,10 @@ function PartnersDirectory({ partners, loading, onAdd }) {
       </div>
 
       <div className="mt-4 text-center">
-        <button className="text-sm font-semibold text-primary hover:underline">
+        <button
+          onClick={onViewAll}
+          className="text-sm font-semibold text-primary hover:underline"
+        >
           View All Partners
         </button>
       </div>
@@ -188,8 +207,31 @@ function PromoBanner() {
 }
 
 export default function MasterData() {
-  const [modalOpen, setModalOpen] = useState(false)
-  const { partners, loading, addPartner } = usePartners()
+  const [addOpen, setAddOpen] = useState(false)
+  const [viewAllOpen, setViewAllOpen] = useState(false)
+  const [editing, setEditing] = useState(null)
+  const [deleting, setDeleting] = useState(null)
+  const { partners, loading, addPartner, updatePartner, deletePartner } =
+    usePartners()
+
+  const handleSave = async (...args) => {
+    if (editing) await updatePartner(...args)
+    else await addPartner(...args)
+    setEditing(null)
+    setAddOpen(false)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!deleting) return
+    try {
+      await deletePartner(deleting.id)
+    } catch (err) {
+      console.error(err)
+      alert('Failed to delete partner: ' + (err?.message || err))
+    } finally {
+      setDeleting(null)
+    }
+  }
 
   return (
     <div className="w-full space-y-8 p-6 lg:p-8">
@@ -199,7 +241,16 @@ export default function MasterData() {
             <PartnersDirectory
               partners={partners}
               loading={loading}
-              onAdd={() => setModalOpen(true)}
+              onAdd={() => {
+                setEditing(null)
+                setAddOpen(true)
+              }}
+              onViewAll={() => setViewAllOpen(true)}
+              onEdit={(p) => {
+                setEditing(p)
+                setAddOpen(true)
+              }}
+              onDelete={(p) => setDeleting(p)}
             />
           </div>
           <div>
@@ -210,9 +261,25 @@ export default function MasterData() {
       </div>
 
       <AddPartnerModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSave={addPartner}
+        open={addOpen}
+        onClose={() => {
+          setAddOpen(false)
+          setEditing(null)
+        }}
+        onSave={handleSave}
+        partner={editing}
+      />
+      <ViewAllPartnersModal
+        open={viewAllOpen}
+        onClose={() => setViewAllOpen(false)}
+        partners={partners}
+        loading={loading}
+      />
+      <ConfirmDeleteModal
+        open={Boolean(deleting)}
+        onClose={() => setDeleting(null)}
+        onConfirm={handleConfirmDelete}
+        partner={deleting}
       />
     </div>
   )

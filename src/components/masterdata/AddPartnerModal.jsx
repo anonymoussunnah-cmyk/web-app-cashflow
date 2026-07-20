@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 
 const TERMS = ['Cash', 'Net 7', 'Net 15', 'Net 30', 'Net 60']
 
-export default function AddPartnerModal({ open, onClose, onSave }) {
+export default function AddPartnerModal({ open, onClose, onSave, partner }) {
   const [name, setName] = useState('')
   const [type, setType] = useState('Customer')
   const [contact, setContact] = useState('')
   const [terms, setTerms] = useState('Net 30')
   const [saving, setSaving] = useState(false)
+  const isEdit = Boolean(partner)
 
   useEffect(() => {
     if (!open) return
@@ -21,13 +22,19 @@ export default function AddPartnerModal({ open, onClose, onSave }) {
   }, [open, onClose])
 
   useEffect(() => {
-    if (open) {
+    if (!open) return
+    if (partner) {
+      setName(partner.name || '')
+      setType(partner.type || 'Customer')
+      setContact(partner.contact || '')
+      setTerms(partner.terms || 'Cash')
+    } else {
       setName('')
       setType('Customer')
       setContact('')
       setTerms('Net 30')
     }
-  }, [open])
+  }, [open, partner])
 
   if (!open) return null
 
@@ -36,7 +43,9 @@ export default function AddPartnerModal({ open, onClose, onSave }) {
     if (!name.trim()) return
     setSaving(true)
     try {
-      await onSave?.({ name, type, contact, terms })
+      const payload = { name, type, contact, terms }
+      if (isEdit) await onSave?.(partner.id, payload)
+      else await onSave?.(payload)
       onClose()
     } catch (err) {
       console.error(err)
@@ -59,11 +68,11 @@ export default function AddPartnerModal({ open, onClose, onSave }) {
           <div className="flex items-center gap-3">
             <div className="rounded-lg bg-primary/10 p-2 text-primary">
               <span className="material-symbols-outlined text-[24px]">
-                person_add
+                {isEdit ? 'edit' : 'person_add'}
               </span>
             </div>
             <h3 className="font-headline text-lg font-bold text-on-surface">
-              Add Partner
+              {isEdit ? 'Edit Partner' : 'Add Partner'}
             </h3>
           </div>
           <button
@@ -155,7 +164,7 @@ export default function AddPartnerModal({ open, onClose, onSave }) {
               disabled={saving}
               className="flex-[2] rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-on-primary shadow-sm transition-colors hover:bg-primary/90 disabled:opacity-60"
             >
-              {saving ? 'Saving...' : 'Save Partner'}
+              {saving ? 'Saving...' : isEdit ? 'Update Partner' : 'Save Partner'}
             </button>
           </div>
         </form>
