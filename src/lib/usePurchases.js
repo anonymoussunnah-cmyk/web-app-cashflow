@@ -51,6 +51,7 @@ function dueDayMonth(value) {
 
 export function usePurchases() {
   const [purchases, setPurchases] = useState([])
+  const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -75,6 +76,24 @@ export function usePurchases() {
     }
   }, [])
 
+  const loadExpenses = useCallback(async () => {
+    if (!isSupabaseConfigured) {
+      setExpenses([])
+      return
+    }
+    try {
+      const { data, error: err } = await supabase
+        .from('expenses')
+        .select('*')
+        .order('expense_date', { ascending: false })
+      if (err) throw err
+      setExpenses(data)
+    } catch (e) {
+      setError(e)
+      console.error(e)
+    }
+  }, [])
+  
   const addPurchase = useCallback(
     async ({ category, supplier, item_desc, amount, payment_type, due_date }) => {
       const row = {
@@ -102,7 +121,39 @@ export function usePurchases() {
     load()
   }, [load])
 
-  return { purchases, loading, error, addPurchase, reload: load }
+  const addExpense = useCallback(
+    async ({ category, amount, note }) => {
+      const row = {
+        category,
+        amount: Number(amount),
+        note: note || null,
+        expense_date: new Date().toISOString().slice(0, 10),
+      }
+      if (!isSupabaseConfigured) {
+        setExpenses((prev) => [{ ...row, id: crypto.randomUUID?.() || Date.now() }, ...prev])
+        return
+      }
+      const { error: err } = await supabase.from('expenses').insert(row)
+      if (err) throw err
+      await loadExpenses()
+    },
+    [loadExpenses],
+  )
+
+  useEffect(() => {
+    load()
+    loadExpenses()
+  }, [load, loadExpenses])
+
+  return {
+    purchases,
+    expenses,
+    loading,
+    error,
+    addPurchase,
+    addExpense,
+    reload: load,
+  }
 }
 
 export { formatDate, dueDayMonth }

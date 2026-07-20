@@ -1,25 +1,6 @@
 import { useState } from 'react'
-
-const PARTNERS = [
-  {
-    name: 'PT. Maju Jaya',
-    type: 'Supplier',
-    contact: 'Budi (0812...)',
-    terms: 'Net 30',
-  },
-  {
-    name: 'CV. Teknik Abadi',
-    type: 'Customer',
-    contact: 'Agus (0856...)',
-    terms: 'Cash',
-  },
-  {
-    name: 'Krakatau Steel',
-    type: 'Supplier',
-    contact: 'Sales (021...)',
-    terms: 'Net 60',
-  },
-]
+import { usePartners } from '../lib/usePartners'
+import AddPartnerModal from './masterdata/AddPartnerModal'
 
 const CATEGORIES = [
   { icon: 'construction', label: 'Material Besi' },
@@ -46,7 +27,7 @@ function TypeBadge({ type }) {
   )
 }
 
-function PartnersDirectory() {
+function PartnersDirectory({ partners, loading, onAdd }) {
   return (
     <section className="flex h-full flex-col rounded-2xl border border-surface-variant/50 bg-surface-container-lowest p-6 soft-shadow">
       <div className="mb-6 flex items-center justify-between">
@@ -59,7 +40,10 @@ function PartnersDirectory() {
             Customers and Suppliers
           </p>
         </div>
-        <button className="flex items-center gap-2 rounded-lg border border-outline-variant/30 bg-secondary-container px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-tertiary-fixed">
+        <button
+          onClick={onAdd}
+          className="flex items-center gap-2 rounded-lg border border-outline-variant/30 bg-secondary-container px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-tertiary-fixed"
+        >
           <span className="material-symbols-outlined text-sm">person_add</span>
           Add Partner
         </button>
@@ -77,33 +61,49 @@ function PartnersDirectory() {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {PARTNERS.map((p) => (
-              <tr
-                key={p.name}
-                className="group border-b border-surface-variant/50 transition-colors hover:bg-surface-container-low"
-              >
-                <td className="py-4 pr-4 font-semibold text-on-surface">
-                  {p.name}
-                </td>
-                <td className="px-4 py-4">
-                  <TypeBadge type={p.type} />
-                </td>
-                <td className="px-4 py-4 text-on-surface-variant">{p.contact}</td>
-                <td className="px-4 py-4 text-on-surface-variant">{p.terms}</td>
-                <td className="py-4 pl-4 text-right opacity-0 transition-opacity group-hover:opacity-100">
-                  <button className="p-1 text-tertiary hover:text-tertiary-container">
-                    <span className="material-symbols-outlined text-[20px]">
-                      edit
-                    </span>
-                  </button>
-                  <button className="p-1 text-error hover:text-error-container">
-                    <span className="material-symbols-outlined text-[20px]">
-                      delete
-                    </span>
-                  </button>
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="py-4 text-center text-on-surface-variant">
+                  Loading partners...
                 </td>
               </tr>
-            ))}
+            ) : partners.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="py-4 text-center text-on-surface-variant">
+                  No partners yet.
+                </td>
+              </tr>
+            ) : (
+              partners.map((p) => (
+                <tr
+                  key={p.id}
+                  className="group border-b border-surface-variant/50 transition-colors hover:bg-surface-container-low"
+                >
+                  <td className="py-4 pr-4 font-semibold text-on-surface">
+                    {p.name}
+                  </td>
+                  <td className="px-4 py-4">
+                    <TypeBadge type={p.type} />
+                  </td>
+                  <td className="px-4 py-4 text-on-surface-variant">
+                    {p.contact}
+                  </td>
+                  <td className="px-4 py-4 text-on-surface-variant">{p.terms}</td>
+                  <td className="py-4 pl-4 text-right opacity-0 transition-opacity group-hover:opacity-100">
+                    <button className="p-1 text-tertiary hover:text-tertiary-container">
+                      <span className="material-symbols-outlined text-[20px]">
+                        edit
+                      </span>
+                    </button>
+                    <button className="p-1 text-error hover:text-error-container">
+                      <span className="material-symbols-outlined text-[20px]">
+                        delete
+                      </span>
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -188,12 +188,19 @@ function PromoBanner() {
 }
 
 export default function MasterData() {
+  const [modalOpen, setModalOpen] = useState(false)
+  const { partners, loading, addPartner } = usePartners()
+
   return (
     <div className="w-full space-y-8 p-6 lg:p-8">
       <div className="mx-auto w-full max-w-7xl space-y-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <PartnersDirectory />
+            <PartnersDirectory
+              partners={partners}
+              loading={loading}
+              onAdd={() => setModalOpen(true)}
+            />
           </div>
           <div>
             <Categories />
@@ -201,6 +208,12 @@ export default function MasterData() {
         </div>
         <PromoBanner />
       </div>
+
+      <AddPartnerModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={addPartner}
+      />
     </div>
   )
 }

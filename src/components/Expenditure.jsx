@@ -225,10 +225,11 @@ function MainPurchases({ onSave }) {
   )
 }
 
-function DailyCash() {
+function DailyCash({ onSave }) {
   const [item, setItem] = useState(DAILY_ITEMS[0])
   const [amount, setAmount] = useState('')
   const [note, setNote] = useState('')
+  const [saving, setSaving] = useState(false)
 
   return (
     <section className="rounded-[24px] border border-outline-variant/10 bg-surface-container-lowest p-6 soft-shadow">
@@ -242,10 +243,24 @@ function DailyCash() {
       </div>
       <form
         className="space-y-4"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault()
-          setAmount('')
-          setNote('')
+          if (!amount) return
+          setSaving(true)
+          try {
+            await onSave?.({
+              category: item,
+              amount,
+              note,
+            })
+            setAmount('')
+            setNote('')
+          } catch (err) {
+            console.error(err)
+            alert('Failed to save expense: ' + (err?.message || err))
+          } finally {
+            setSaving(false)
+          }
         }}
       >
         <div className="relative">
@@ -276,12 +291,13 @@ function DailyCash() {
           onChange={(e) => setNote(e.target.value)}
           className="w-full rounded-xl border-none bg-surface-container-low px-4 py-3 text-sm font-body text-on-surface focus:ring-2 focus:ring-primary/40"
         />
-        <button
-          type="submit"
-          className="w-full rounded-xl border border-primary/20 bg-surface-container-high py-3 font-body font-semibold text-primary transition-colors hover:bg-primary-container/20"
-        >
-          Add Expense
-        </button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full rounded-xl border border-primary/20 bg-surface-container-high py-3 font-body font-semibold text-primary transition-colors hover:bg-primary-container/20 disabled:opacity-60"
+          >
+            {saving ? 'Saving...' : 'Add Expense'}
+          </button>
       </form>
     </section>
   )
@@ -367,7 +383,7 @@ function UpcomingDues({ purchases, loading }) {
 }
 
 export default function Expenditure() {
-  const { purchases, loading, addPurchase } = usePurchases()
+  const { purchases, loading, addPurchase, addExpense } = usePurchases()
 
   return (
     <main className="flex-1 p-6 md:p-10">
@@ -386,7 +402,7 @@ export default function Expenditure() {
         </section>
 
         <div className="space-y-8">
-          <DailyCash />
+          <DailyCash onSave={addExpense} />
           <UpcomingDues purchases={purchases} loading={loading} />
         </div>
       </div>

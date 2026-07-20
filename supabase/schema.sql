@@ -83,3 +83,64 @@ values
   ('PRC-2023-1029', 'Material (Baja, Aluminium, etc)', 'PT Baja Makmur', 'Baja ST41', 4500000, 'Tempo 14 Hari', '2023-11-12', 'Unpaid'),
   ('PRC-2023-1030', 'Tools (Pahat Bubut, Endmill)', 'Toko Teknik Sentosa', 'Endmill & Pahat', 1250000, 'Tempo 14 Hari', '2023-11-18', 'Unpaid')
 on conflict (purchase_no) do nothing;
+
+-- =========================================================================
+-- expenses: stores small daily operational cash outflows (not supplier debt)
+-- =========================================================================
+create table if not exists public.expenses (
+  id          uuid primary key default gen_random_uuid(),
+  category    text not null,
+  amount      numeric(15,2) not null default 0,
+  note        text,
+  expense_date date not null default current_date,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists expenses_date_idx on public.expenses (expense_date desc);
+
+alter table public.expenses enable row level security;
+
+drop policy if exists "Expenses are readable by everyone" on public.expenses;
+create policy "Expenses are readable by everyone"
+  on public.expenses for select
+  using (true);
+
+drop policy if exists "Expenses are insertable by everyone" on public.expenses;
+create policy "Expenses are insertable by everyone"
+  on public.expenses for insert
+  with check (true);
+
+-- =========================================================================
+-- partners: stores customers and suppliers master data
+-- =========================================================================
+create table if not exists public.partners (
+  id        uuid primary key default gen_random_uuid(),
+  name      text not null,
+  type      text not null default 'Customer'
+            check (type in ('Customer', 'Supplier')),
+  contact   text,
+  terms     text not null default 'Cash',
+  created_at timestamptz not null default now()
+);
+
+create index if not exists partners_name_idx on public.partners (name);
+
+alter table public.partners enable row level security;
+
+drop policy if exists "Partners are readable by everyone" on public.partners;
+create policy "Partners are readable by everyone"
+  on public.partners for select
+  using (true);
+
+drop policy if exists "Partners are insertable by everyone" on public.partners;
+create policy "Partners are insertable by everyone"
+  on public.partners for insert
+  with check (true);
+
+-- Seed sample partners (optional)
+insert into public.partners (name, type, contact, terms)
+values
+  ('PT. Maju Jaya', 'Supplier', 'Budi (0812...)', 'Net 30'),
+  ('CV. Teknik Abadi', 'Customer', 'Agus (0856...)', 'Cash'),
+  ('Krakatau Steel', 'Supplier', 'Sales (021...)', 'Net 60')
+on conflict do nothing;
